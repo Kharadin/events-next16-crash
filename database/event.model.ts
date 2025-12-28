@@ -110,7 +110,9 @@ const EventSchema = new Schema<IEvent>(
 );
 
 // Pre-save hook for slug generation and data normalization
-EventSchema.pre('save', function (next) {
+// --- 🛑 Change made here 🛑 ---
+// RemoveD the 'next' argument (it was .. function(next) and ensure the function body is synchronous
+EventSchema.pre('save', function () {
   const event = this as IEvent;
 
   // Generate slug only if title changed or document is new
@@ -128,7 +130,8 @@ EventSchema.pre('save', function (next) {
     event.time = normalizeTime(event.time);
   }
 
-  next();
+  //next();
+  // No call is needed for syncronous hooks
 });
 
 // Helper function to generate URL-friendly slug
@@ -179,11 +182,12 @@ function normalizeTime(timeString: string): string {
 }
 
 // Create unique index on slug for better performance
-EventSchema.index({ slug: 1 }, { unique: true });
+//EventSchema.index({ slug: 1 }, { unique: true });
+// I: Not required, since already has unique in shema.
 
 // Create compound index for common queries
 EventSchema.index({ date: 1, mode: 1 });
 
 const Event = models.Event || model<IEvent>('Event', EventSchema);
 
-export default Event;
+export default Event
