@@ -154,7 +154,15 @@ function normalizeDate(dateString: string): string {
   return date.toISOString().split('T')[0]; // Return YYYY-MM-DD format
 }
 
-// Helper function to normalize time format
+/**
+ * Normalize a time string to 24-hour "HH:MM" format.
+ *
+ * Accepts inputs like "H:MM", "HH:MM", or those with an AM/PM suffix (e.g., "9:30 PM").
+ *
+ * @param timeString - The input time string to normalize
+ * @returns The time formatted as `"HH:MM"` in 24-hour representation
+ * @throws Error if the input does not match expected time formats or if hour/minute values are out of range
+ */
 function normalizeTime(timeString: string): string {
   // Handle various time formats and convert to HH:MM (24-hour format)
   const timeRegex = /^(\d{1,2}):(\d{2})(\s*(AM|PM))?$/i;

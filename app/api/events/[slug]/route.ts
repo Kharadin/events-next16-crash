@@ -18,7 +18,15 @@ type RouteParams = {
 // function isValidSlug(slug: string): boolean {
 //   // Matches the app's slug generator: lowercase, numbers, and hyphen-separated words.
 //   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-// }
+/**
+   * Handle GET requests to fetch a single event by its slug.
+   *
+   * Validates and sanitizes the slug from route params, ensures a database connection,
+   * and returns an HTTP response with the event when found or an appropriate error status.
+   *
+   * @param params - An object (promise-resolved) that provides a `slug` string from the route.
+   * @returns A NextResponse containing a `message` and, on success, the `event` object; responses use status codes 200 (found), 400 (invalid slug), 404 (not found), or 500 (server error).
+   */
 
 export async function GET ( req:NextRequest, {params}: RouteParams): Promise<NextResponse>{
     try {
