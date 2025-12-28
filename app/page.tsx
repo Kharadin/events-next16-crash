@@ -24,7 +24,6 @@ const Page = async () => {
     console.error('Error fetching events:', error);
     // events remains empty array, component will render without crashing
   }
-   console.log(events)
   return (
     <section>
       <h1 className="text-center ">Event Management Project<br /> Всегда есть куда пойти</h1>
