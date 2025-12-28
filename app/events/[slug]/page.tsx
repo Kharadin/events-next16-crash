@@ -5,10 +5,10 @@ import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 import { IEvent } from "@/database";
 import EventCard from "@/components/EventCard";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!BASE_URL) {
-  throw new Error('NEXT_PUBLIC_BASE_URL environment variable is not set')
+  throw new Error('NEXT_PUBLIC_BASE_URL environment variable is not set');
 }
 const EventDetailItem = ({icon, alt, label} : {icon: string; alt: string; label: string; })=> (
   <div className="flex flex-row gap-2 items-center"> 
