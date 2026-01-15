@@ -1,18 +1,51 @@
 'use client'
 
+import { createBooking } from "@/lib/actions/booking.actions"
+// import posthog from "posthog-js";
+import { usePostHog } from 'posthog-js/react'
 import  { useState } from "react"
 
-const BookEvent = () => {
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+const BookEvent = ({eventId, slug }: {eventId: string; slug: string}) => {
+    const posthog = usePostHog() // Use this instead of the global import
+    const [email, setEmail] = useState('')
+    const [submitted, setSubmitted] = useState(false)
+                        // added async since we are added await
+     const handleSubmit = async  (e: React.FormEvent) => {
+        e.preventDefault();
+        const {success} = await createBooking({eventId, slug, email})
+        console.log('PostHog loaded:', posthog.__loaded)
+        console.log('PostHog key:', process.env.NEXT_PUBLIC_POSTHOG_KEY)
+        console.log('PostHog host:', process.env.NEXT_PUBLIC_POSTHOG_HOST)
+        if (success) {
+          // 1. Ensure posthog is ready
+          if (posthog) {
+            posthog.capture('event_booked', 
+              { eventId, slug, email }, 
+              { send_instantly: true }
+            );  
+            console.log('Posthog -booked')
+            // 2. Add a tiny delay if you find the request is being cancelled
+            await new Promise(r => setTimeout(r, 100)); 
+          
+          }
+          setSubmitted(true)
+          
+        } else {
+          console.error('Booking creation failed')
+          posthog.captureException('Booking creation failed' )
+            console.log('Posthog -booking failed')
+        }
+      
+     }    
 
-  const handleSubmit =  (e: React.FormEvent) => {
-    e.preventDefault()
+  // we actually want to submit the form, so commenting this out
+  // we are in fact submitting it with the server action above: createBooking
+  //   e.preventDefault()
 
-    setTimeout(() => {
-      setSubmitted(true)
-    }, 1000)
-  }
+  //   setTimeout(() => {
+  //     setSubmitted(true)
+  //   }, 1000)
+  // }
   return (
     <div id='book-event'>
       {submitted ? (
@@ -37,4 +70,6 @@ const BookEvent = () => {
   )
 }
 
-export default BookEvent
+
+export default BookEvent;
+

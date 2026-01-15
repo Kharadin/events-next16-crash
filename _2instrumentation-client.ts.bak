@@ -1,0 +1,45 @@
+//2
+// instrumentation-client.ts
+// 1. Use the full bundle that includes the recorder
+// instrumentation-client.ts
+import posthog from 'posthog-js/dist/module.full.no-external'
+
+  if (typeof window !== 'undefined') {
+posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: "/ingest",
+  ui_host: "https://eu.i.posthog.com",
+  defaults: '2025-05-24',
+  // api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+  disable_external_dependency_loading: true,
+  advanced_disable_flags: true,
+
+  // 1. Correct 2026 property for Transport
+  api_transport: 'fetch', 
+
+  // 2. THE FIX: Control batching behavior
+  // In 2026, 'request_batching' is a boolean. 
+  // Setting it to false stops the SDK from waiting to group events.
+  request_batching: false, 
+
+  // 3. Interval Control
+  // If 'flush_interval_ms' is missing, it's because it was renamed 
+  // to 'poll_interval' or handled automatically by disabling batching.
+  // If you still see resets, use this to force smaller data chunks:
+  session_recording: {
+    maskAllInputs: true,
+  },
+
+  persistence: 'localStorage+cookie',
+  capture_exceptions: true,
+  disable_compression: true, // Add this temporarily
+  
+    autocapture: true,  // Make sure this is set
+  debug: process.env.NODE_ENV === 'development',
+})
+
+
+
+  }
+
+
+  

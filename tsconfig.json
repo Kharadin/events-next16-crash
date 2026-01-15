@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "_3Repoinstrumentation-client.ts.bak", "_1instrumentation1-client.ts.bak", "2_instrumentation-client.ts.bak"  ],
   "exclude": ["node_modules"]
 }

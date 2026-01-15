@@ -1,0 +1,43 @@
+// 1
+// instrumentation-client.js
+// import posthog from 'posthog-js'
+
+// posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+//     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+//     defaults: '2025-11-30',
+//     capture_exceptions: true,
+//     debug: process.env.NODE_ENV==='development'
+
+// });
+            
+// import posthog from 'posthog-js'
+// import 'posthog-js/dist/recorder'
+
+import { posthog } from 'posthog-js/dist/module.no-external'
+import 'posthog-js/dist/recorder'
+import 'posthog-js/dist/surveys' // if using surveys
+import 'posthog-js/dist/exception-autocapture' // if using exceptions
+
+
+
+export const onRouterTransitionStart = () => {
+  // 1. Essential Guard: Ensure we are in the browser
+  if (typeof window !== 'undefined') {
+    
+    // 2. Essential Timing: This function is called by Next.js 
+    // only when the client-side router is ready.
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+      
+      // 3. Essential Defaults: Versioned config for 2026
+      defaults: '2025-11-30',
+
+      // 4. Essential Chrome Fix: Prevents the "Failed to fetch" error 
+      // by stopping secondary remote script loading.
+      disable_external_dependency_loading: true, 
+      
+      capture_exceptions: true,
+      debug: process.env.NODE_ENV === 'development',
+    })
+  }
+}
