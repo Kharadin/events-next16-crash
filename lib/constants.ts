@@ -16,7 +16,7 @@ export const events: EventItem[] = [
     location: 'Sochi, Russia',
     date: 'April 20, 2024',
     time: '7:00 PM'
-  },
+  },  
   {
     image: '/images/event2.png',
     title: 'Tuapse Spring Marathon',
